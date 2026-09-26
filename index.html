@@ -1,158 +1,196 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+  <link rel="icon" type="image/png" href="logo.png?v=2">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Broke No More</title>
+  <title>Broke No More - Core Tracker</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- 🐷 ANIMATED LOADING SCREEN -->
+<div id="loading-screen" class="loading-overlay">
+  <div class="loader-content">
+    <div class="loader-icon">🐷</div>
+    <div class="loader-spinner"></div>
+    <h3 class="loader-title">BROKE NO MORE</h3>
+    <p class="loader-sub">กำลังคำนวณเงินในกระเป๋า</p>
+  </div>
+</div>
 
-  <div class="app-container">
+  <div class="arch-bg-layer"></div>
+
+  <div class="app-layout-top">
     
-    <!-- 1. HEADER (ไม่มี tagline คลีนๆ) -->
-    <header class="app-header">
-      <div class="logo">
-        <span class="logo-icon">💸</span>
-        <h1>BROKE NO MORE</h1>
-      </div>
-    </header>
+    <!-- TOP NAVBAR (เหลือเฉพาะฟีเจอร์หลัก) -->
+    <header class="navbar">
+  <div class="nav-brand">
+    <img src="logo.png" alt="Broke No More Logo" class="logo-img">
+    <span class="logo-text">BROKE NO MORE</span>
 
-    <!-- 2. DASHBOARD CARDS -->
-    <section class="dashboard-grid">
-      <div class="card metric-card highlight">
-        <span class="card-label">วันนี้ใช้ได้อีกไม่เกิน</span>
-        <div class="metric-value green" id="daily-allowance">฿0.00 / วัน</div>
-        <span class="card-sub">คำนวณจาก ยอดคงเหลือ ÷ วันที่เหลือ</span>
-      </div>
+  </div>
 
-      <div class="card metric-card">
-        <span class="card-label">เงินคงเหลือทั้งหมด</span>
-        <div class="metric-value" id="current-balance">฿0.00</div>
-        <span class="card-sub">จากงบประมาณตั้งต้น</span>
-      </div>
+</header>
 
-      <div class="card metric-card">
-        <span class="card-label">คะแนนวินัยทางการเงิน</span>
-        <div class="metric-value" id="guilty-score">100 / 100</div>
-        <span class="card-sub">ยิ่งจ่ายกิเลสเยอะ คะแนนยิ่งลด</span>
-      </div>
-    </section>
-
-    <!-- 3. MAIN CONTENT (3 คอลัมน์สมบูรณ์แบบ) -->
-    <main class="main-content">
+    <main class="main-wrapper-top">
       
-      <!-- ===== คอลัมน์ที่ 1 (ซ้ายสุด): ศูนย์รวมสติ & Hall of Fame ===== -->
-      <aside class="sidebar-column">
-        
-        <!-- บล็อก 1: สถานะสติการเงิน -->
-        <div class="card status-card">
-          <h3>🧠 สถานะสติการเงิน</h3>
-          <div class="status-badge green" id="mind-status">สติแข็งแกร่ง!</div>
-          <p class="status-desc" id="status-desc">ยังไม่ได้เปย์กิเลสในวันนี้ จงรักษาความดีงามนี้ไว้จนถึงสิ้นเดือน</p>
-        </div>
+      <!-- DASHBOARD SUMMARY -->
+      <section class="metrics-grid core-metrics">
+    <!-- กล่องที่ 1: เงินคงเหลือของวันนี้ -->
+    <div class="metric-card green-highlight">
+      <span class="m-label">วันนี้ใช้ได้อีก</span>
+      <h3 id="today-remaining">฿0</h3>
+      <span class="m-sub">โควตาสำหรับวันนี้</span>
+   </div>
 
-        <!-- บล็อก 2: กิเลส Hall of Fame (Top 3 จ่ายหนักสุด) -->
-        <div class="card hall-of-fame-card">
-          <h3>🏆 กิเลส Hall of Fame</h3>
-          <p class="hof-sub">3 รายการเปย์หนักสุดเดือนนี้</p>
-          <div class="hof-list" id="hof-list">
-            <div class="hof-empty">ยังไม่มีรายการกิเลส 🎉</div>
-          </div>
-        </div>
+    <!-- กล่องที่ 2: เงินที่ใช้ไปแล้ววันนี้ (เพิ่มใหม่) -->
+    <div class="metric-card">
+      <span class="m-label">วันนี้ใช้ไปแล้ว</span>
+      <h3 id="today-spent">฿0</h3>
+      <span class="m-sub">รวมรายจ่ายวันนี้</span>
+    </div>
 
-        <!-- บล็อก 3: ข้อคิดเตือนสติ -->
-        <div class="card quote-card">
-          <h3>💡 ข้อคิดเตือนสติ</h3>
-          <p id="sarcastic-quote" class="quote-text">"ยินดีต้อนรับ! บันทึกรายจ่ายแรกของคุณ แล้วมาดูกันว่าสติหรือกิเลสจะชนะ"</p>
-        </div>
+    <!-- กล่องที่ 3: เงินคงเหลือทั้งหมด -->
+    <div class="metric-card">
+      <span class="m-label">เงินคงเหลือทั้งหมด</span>
+      <h3 id="current-balance">฿0</h3>
+      <span class="m-sub">งบทั้งหมดในระบบ</span>
+    </div>
+  </section>
 
-      </aside>
+  <!-- การ์ดหลอดสัดส่วนรายจ่ายสะสม -->
+<div class="progress-card">
+  <div class="progress-header">
+    <span>📊 สัดส่วนการใช้เงินสะสม (วันที 1 ถึง วันปัจจุบัน)</span>
+    <strong id="progress-percent-text">0% ของงบสะสม</strong>
+  </div>
+  
+  <!-- หลอด Progress Bar แบ่ง 3 สี -->
+  <div class="progress-bar-container">
+    <div id="bar-essential" class="bar-segment essential" style="width: 0%;"></div>
+    <div id="bar-reward" class="bar-segment reward" style="width: 0%;"></div>
+    <div id="bar-impulse" class="bar-segment impulse" style="width: 0%;"></div>
+  </div>
 
-      <!-- ===== คอลัมน์ที่ 2 (กลาง): ฟอร์มบันทึก & สัดส่วน Vibe ===== -->
-      <div class="middle-column">
-        
-        <section class="card form-card">
-          <h2>บันทึกรายจ่ายใหม่</h2>
-          <form id="expense-form">
-            <div class="form-group">
-              <label for="amount-input">จำนวนเงิน (บาท)</label>
-              <input type="number" id="amount-input" placeholder="0.00" step="0.01" required>
-            </div>
+  <!-- Legend คำอธิบายสี -->
+  <div class="progress-legend">
+    <span><i class="dot green"></i> จำเป็น (Need) <strong id="pct-essential">0%</strong></span>
+    <span><i class="dot yellow"></i> รางวัล (Reward) <strong id="pct-reward">0%</strong></span>
+    <span><i class="dot red"></i> ฟุ่มเฟือย (Want) <strong id="pct-impulse">0%</strong></span>
+  </div>
+</div>
 
-            <div class="form-group">
-              <label for="note-input">รายการ / บันทึกสั้นๆ</label>
-              <input type="text" id="note-input" placeholder="เช่น กาแฟส้ม, สุ่มกาชา" required>
-            </div>
+  <!-- เพิ่มต่อท้ายจาก <section class="card history-card"> ... </section> -->
+<section class="card calendar-card" style="margin-top: 20px;">
+  <div class="card-title">
+    <h3>📅 ปฏิทินบันทึกประจำเดือน</h3>
+  </div>
+  <div class="calendar-grid" id="calendar-grid">
+    <!-- รายชื่อวันและวันที่พร้อมจุดสีจะถูกสร้างผ่าน JS -->
+  </div>
+</section>
 
-            <div class="form-group">
-              <label for="level-select">ระดับกิเลส (Impulse Level)</label>
-              <select id="level-select">
-                <option value="ESSENTIAL">🟢 Need — จำเป็นต่อการรอดชีวิต</option>
-                <option value="REWARD">🟡 Reward — ให้รางวัลตัวเองนิดหน่อย</option>
-                <option value="IMPULSE">🔴 Impulse — กิเลสเพียวๆ (พร้อมโดนแซว)</option>
-              </select>
-            </div>
+      <!-- MAIN CORE GRID -->
+<div class="content-grid core-grid">
+  <!-- ฝั่งซ้าย: ฟอร์มบันทึก -->
+  <section class="card form-card">
+    
+    <!-- ⚙️ ส่วนตั้งค่างบประมาณประจำเดือน (เพิ่มใหม่) -->
+    <div class="budget-setup-box" style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-color);">
+      <div class="card-title">
+        <h3 style="font-size: 0.95rem;">⚙️ ตั้งค่างบประมาณ & วันที่</h3>
+      </div>
+      <form id="budget-setup-form" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; margin-top: 8px;">
+        <input type="number" id="init-budget-input" placeholder="งบรวมทั้งหมด (฿)" required min="1" style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem;">
+        <input type="number" id="init-days-input" placeholder="จำนวนวัน" value="30" required min="1" style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem;">
+        <button type="submit" style="background: #3B82F6; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer;">บันทึกงบ</button>
+      </form>
+    </div>
 
-            <button type="submit" class="btn-primary">+ บันทึกรายการ</button>
-          </form>
-        </section>
+    <!-- บันทึกรายจ่าย -->
+    <div class="card-title">
+      <h3>⚡ บันทึกรายจ่าย</h3>
+    </div>
 
-        <section class="card vibe-card">
-          <h3>สัดส่วนการใช้เงินเดือนนี้</h3>
-          <div class="vibe-progress-bar">
-            <div class="bar-segment green" id="bar-essential" style="width: 0%;"></div>
-            <div class="bar-segment yellow" id="bar-reward" style="width: 0%;"></div>
-            <div class="bar-segment red" id="bar-impulse" style="width: 0%;"></div>
-          </div>
-          <div class="vibe-legend">
-            <span id="legend-essential">🟢 จำเป็น 0%</span>
-            <span id="legend-reward">🟡 รางวัล 0%</span>
-            <span id="legend-impulse">🔴 กิเลส 0%</span>
-          </div>
-        </section>
+    <div class="quick-amounts">
+      <span>ยอดฮิต:</span>
+      <button type="button" class="btn-quick" data-val="50">฿50</button>
+      <button type="button" class="btn-quick" data-val="100">฿100</button>
+      <button type="button" class="btn-quick" data-val="300">฿300</button>
+      <button type="button" class="btn-quick" data-val="500">฿500</button>
+    </div>
 
+    <form id="expense-form">
+      <div class="input-row">
+        <input type="number" id="amount-input" placeholder="฿ จำนวนเงิน" step="0.01" required>
+        <input type="text" id="note-input" placeholder="รายการ เช่น ข้าวเช้า, ชาไข่มุก" required>
       </div>
 
-      <!-- ===== คอลัมน์ที่ 3 (ขวา): ปฏิทิน & ประวัติการใช้จ่าย ===== -->
-      <div class="right-column">
-        
-        <section class="card calendar-card">
-          <div class="calendar-header">
-            <h3>ปฏิทินเช็คกิเลสประจำเดือน</h3>
-            <span class="month-label" id="calendar-month-year">มีนาคม 2026</span>
-          </div>
-          <div class="calendar-grid" id="calendar-grid"></div>
-        </section>
+      <div class="impulse-selector">
+        <label class="level-option green">
+          <input type="radio" name="level" value="ESSENTIAL" checked>
+          <span>🟢 จำเป็น (Need)</span>
+        </label>
+        <label class="level-option yellow">
+          <input type="radio" name="level" value="REWARD">
+          <span>🟡 รางวัล (Reward)</span>
+        </label>
+        <label class="level-option red">
+          <input type="radio" name="level" value="IMPULSE">
+          <span>🔴 ฟุ่มเฟือย (Want)</span>
+        </label>
+      </div>
 
+      <button type="submit" class="btn-submit full-width">✓ บันทึกรายการ</button>
+    </form>
+  </section>
+
+        <!-- ฝั่งขวา: ประวัติรายการล่าสุด -->
         <section class="card history-card">
-          <div class="history-header">
-            <h2>ประวัติการใช้จ่าย</h2>
-            <div class="filter-buttons">
-              <button class="btn-filter active" data-filter="ALL">ทั้งหมด</button>
-              <button class="btn-filter" data-filter="IMPULSE">🔴 เฉพาะกิเลส</button>
-            </div>
+          <h3>📊 ประวัติการใช้จ่ายล่าสุด</h3>
+          <div class="expense-list" id="expense-list">
+            <!-- รายการที่บันทึกจริงจะมาแสดงตรงนี้ -->
           </div>
-          <div class="expense-list" id="expense-list"></div>
         </section>
-
       </div>
 
     </main>
   </div>
 
-  <!-- Custom Alert Modal เตือนสติกลางหน้าจอ -->
-  <div class="modal-overlay" id="sarcasm-modal">
+  <!-- 🚨 MODAL POPUP แจ้งเตือนเมื่อใช้เงินเกินโควตาประจำวัน -->
+  <div id="over-budget-modal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-icon">🚨</div>
-      <h3>เตือนสติสายเปย์!</h3>
-      <div class="modal-quote" id="modal-quote">"..."</div>
-      <div class="modal-warning" id="modal-warning">เงินจมไปกับกิเลสแล้ว 0%</div>
-      <button class="btn-modal-close" id="close-modal-btn">จะซื้อ! (ยอมรับกรรม)</button>
+      <h3>เตือนสติ!!! วันนี้ใช้เกินโควตาแล้ว</h3>
+      <p id="over-budget-text" style="font-size: 0.9rem; color: #475569; margin-bottom: 20px; line-height: 1.5;"></p>
+      <button type="button" id="close-modal-btn" style="background: #EF4444; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">ยอมรับผลกรรม</button>
     </div>
   </div>
 
   <script type="module" src="app.js"></script>
+  
+  <script>
+    window.addEventListener('load', () => {
+  const loader = document.getElementById('loading-screen');
+  if (loader) {
+    // ให้แสดงหน้าโชว์ไว้ 1 วินาทีเพื่อความละมุน แล้วค่อยซูมหายไป
+    setTimeout(() => {
+      loader.classList.add('fade-out');
+    }, 1000);
+  }
+});
+  </script>
+
+  <!-- Custom Alert Modal กลางจอ -->
+<div id="custom-alert-modal" class="custom-modal-overlay">
+  <div class="custom-modal-card">
+    <div class="custom-modal-icon" id="custom-alert-icon">✨</div>
+    <h3 id="custom-alert-title">แจ้งเตือน</h3>
+    <p id="custom-alert-message">ข้อความแจ้งเตือน...</p>
+    <button type="button" id="custom-alert-btn">ตกลง</button>
+  </div>
+</div>
 </body>
 </html>
+
