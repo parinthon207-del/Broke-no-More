@@ -1,342 +1,472 @@
-:root {        
+:root {
+  --bg-main: #FAF8F5;          /* สีครีมอุ่นๆ สบายตา */
   --bg-card: #FFFFFF;
-  --text-main: #0F172A;
-  --text-muted: #475569;
-  --border-color: #DCFCE7;     
-  
-  --primary-green: #10B981;    
-  --primary-dark: #064E3B;     
-  --color-essential: #059669;
-  --color-reward: #F59E0B;
-  --color-impulse: #EF4444;
-  --primary-btn: #059669;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  --primary-green: #10B981;
+  --accent-soft-green: #E6F4EA;
+  --accent-orange: #FF6B00;
+  --border-color: #E2E8F0;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  padding: 24px;
+body { background: var(--bg-main); color: var(--text-main); }
+
+.app-layout { display: flex; min-height: 100vh; }
+
+/* ==========================================
+   1. SIDEBAR
+   ========================================== */
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: #FFFFFF;
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
   display: flex;
-  justify-content: center;
-}
-
-/* ขยายความกว้างเพื่อปิดพื้นที่ว่างฝั่งซ้าย-ขวา */
-.app-container {
-  width: 100%;
-  max-width: 1380px; 
-}
-
-/* Header แถบเขียวเข้มสไตล์มินิมอล */
-.app-header {
-  background: var(--primary-dark);
-  color: #FFFFFF;
-  padding: 18px 28px;
-  border-radius: 20px;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.2);
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-.logo h1 {
-  font-size: 1.35rem;
+.logo h2 {
+  font-size: 1rem;
   font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: 0.5px;
+  color: #064E3B;
+  letter-spacing: -0.3px;
+  margin-left: 8px;
 }
 
-/* Base Card Style */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 24px;
-}
-
-.metric-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.card-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.metric-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 8px 0 4px 0;
-}
-
-.metric-value.green {
-  color: var(--color-essential);
-}
-
-.card-sub {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* Main Layout 3 คอลัมน์ */
-.main-content {
-  display: grid;
-  grid-template-columns: 280px 1fr 1.2fr;
-  gap: 20px;
-}
-
-@media (max-width: 1024px) {
-  .main-content { grid-template-columns: 1fr; }
-  .dashboard-grid { grid-template-columns: 1fr; }
-}
-
-.sidebar-column, .middle-column, .right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Sidebar Column Styles */
-.status-card h3, .hall-of-fame-card h3, .quote-card h3 {
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin: 8px 0;
-}
-
-.status-badge.green { background: #D1FAE5; color: #065F46; }
-
-.status-desc {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
-
-/* Hall of Fame Styles */
-.hof-sub {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
-
-.hof-list {
+.nav-menu {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.hof-item {
+.nav-item {
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: var(--accent-soft-green);
+  color: #065F46;
+}
+
+/* FIRE STACK WIDGET */
+.streak-widget {
+  background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+  border: 1px solid #FFD8A8;
+  border-radius: 16px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: #FEF2F2;
-  border: 1px solid #FECACA;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 0.82rem;
+  gap: 12px;
+  margin-top: auto;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.06);
 }
 
-.hof-rank {
-  font-weight: 700;
-  margin-right: 6px;
+.fire-stack-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.hof-note {
+.fire-icon {
+  position: absolute;
+  font-size: 1.8rem;
+  animation: pulse-fire 1.2s infinite ease-in-out alternate;
+}
+
+.fire-layer-1 { z-index: 3; filter: drop-shadow(0 0 6px rgba(255, 107, 0, 0.8)); }
+.fire-layer-2 { z-index: 2; transform: scale(1.25) translateY(-3px); opacity: 0.6; filter: blur(1px); }
+.fire-layer-3 { z-index: 1; transform: scale(1.5) translateY(-6px); opacity: 0.3; filter: blur(3px); }
+
+@keyframes pulse-fire {
+  0% { transform: scale(1) rotate(-3deg); }
+  100% { transform: scale(1.15) rotate(3deg); }
+}
+
+.streak-info { display: flex; flex-direction: column; }
+.streak-label { font-size: 0.68rem; color: #C2410C; font-weight: 700; }
+.streak-count { font-size: 1.05rem; color: #EA580C; font-weight: 800; }
+
+/* ==========================================
+   2. MAIN WRAPPER & GLASS CARDS
+   ========================================== */
+.main-wrapper {
   flex-grow: 1;
-  font-weight: 500;
-  color: #991B1B;
-  white-space: nowrap;
+  padding: 24px 32px;
+  max-width: 1400px;
+}
+
+.card, 
+.metric-card, 
+.greeting-banner {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03) !important;
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.06) !important;
+}
+
+.greeting-banner {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.greeting-text h1 { font-size: 1.2rem; font-weight: 800; }
+.greeting-text p { font-size: 0.8rem; color: var(--text-muted); }
+.date-badge { background: #F1F5F9; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* เปลี่ยนจาก 4 เป็น 3 */
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.metric-card { padding: 18px; }
+.m-label { font-size: 0.78rem; color: var(--text-muted); display: block; }
+.metric-card h3 { font-size: 1.4rem; font-weight: 800; margin: 6px 0; }
+.m-sub { font-size: 0.72rem; color: var(--text-muted); display: block; }
+
+/* ==========================================
+   ✨ 3. การ์ดเขียวมรกต (EMERALD HIGHLIGHT CARD)
+   ========================================== */
+.metric-card.green-highlight {
+  position: relative;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 110px;
+  background: linear-gradient(135deg, #059669 0%, #10B981 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.35) !important;
+  color: #FFFFFF !important;
 }
 
-.hof-amount {
-  font-weight: 700;
-  color: #DC2626;
+.metric-card.green-highlight .m-label {
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
-.hof-empty {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-align: center;
-  padding: 6px 0;
+.metric-card.green-highlight h3 {
+  color: #FFFFFF !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.quote-text {
-  font-size: 0.85rem;
-  color: #047857;
-  background: #ECFDF5;
-  padding: 12px;
-  border-radius: 12px;
-  line-height: 1.4;
-  border-left: 4px solid #10B981;
+.metric-card.green-highlight .m-sub {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* Form Styles */
-.form-card h2, .history-card h2, .vibe-card h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: 14px;
+/* ลำแสงวิ่งเฉียงสะท้อนแสง */
+.metric-card.green-highlight::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.35) 52%,
+    transparent 57%
+  );
+  transform: rotate(30deg);
+  animation: emerald-shine 6s infinite ease-in-out;
+  pointer-events: none;
 }
 
-.form-group { margin-bottom: 14px; }
-.form-group label {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 6px;
+@keyframes emerald-shine {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  20%, 100% { transform: translateX(100%) rotate(30deg); }
 }
 
-.form-group input, .form-group select {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  font-size: 0.95rem;
-  outline: none;
-  background: var(--bg-main);
+/* ==========================================
+   4. FORM & LEVEL SELECTOR (คลีน สบายตา)
+   ========================================== */
+.content-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+.card { padding: 20px; margin-bottom: 20px; }
+
+.quick-amounts { display: flex; align-items: center; gap: 8px; margin: 12px 0; font-size: 0.8rem; }
+.btn-quick { background: #F1F5F9; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+.input-row { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 16px; }
+.input-row input { padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; }
+
+/* ตัวเลือกหมวดหมู่ Need / Reward / Want */
+.impulse-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  background-color: var(--primary-btn);
-  color: #FFF;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
+.level-option {
+  flex: 1;
+  position: relative;
   cursor: pointer;
 }
 
-/* Vibe Progress Bar */
-.vibe-progress-bar {
-  display: flex;
-  height: 12px;
-  background: #E2E8F0;
-  border-radius: 6px;
-  overflow: hidden;
-  margin: 12px 0 8px 0;
+.level-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-.bar-segment.green { background: var(--color-essential); }
-.bar-segment.yellow { background: var(--color-reward); }
-.bar-segment.red { background: var(--color-impulse); }
-
-.vibe-legend {
+.level-option span {
   display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* Calendar & History */
-.calendar-header, .history-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: center;
+  padding: 10px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748B;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.level-option:hover span {
+  transform: translateY(-2px);
+}
+
+/* ตอนกดเลือก (Active States) */
+.level-option.green input[type="radio"]:checked + span {
+  background: #ECFDF5 !important;
+  color: #047857 !important;
+  border-color: #10B981 !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+}
+
+.level-option.yellow input[type="radio"]:checked + span {
+  background: #FEF3C7 !important;
+  color: #B45309 !important;
+  border-color: #F59E0B !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2) !important;
+}
+
+.level-option.red input[type="radio"]:checked + span {
+  background: #FEF2F2 !important;
+  color: #B91C1C !important;
+  border-color: #EF4444 !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2) !important;
+}
+
+.form-actions { display: flex; gap: 10px; }
+.btn-submit { 
+  flex: 1; 
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%); 
+  color: #FFF; 
+  border: none; 
+  padding: 12px; 
+  border-radius: 12px; 
+  font-weight: 700; 
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4); }
+
+.btn-chill { 
+  background: #FEF3C7; 
+  color: #92400E; 
+  border: none; 
+  padding: 12px; 
+  border-radius: 12px; 
+  font-weight: 700; 
+  cursor: pointer; 
+}
+
+/* ==========================================
+   5. COOLING ZONE & CALENDAR
+   ========================================== */
+.cooling-zone { background: #FFF; }
+.card-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.wish-item { background: #FAF8F5; padding: 12px; border-radius: 12px; margin-bottom: 8px; }
+.btn-win { background: #10B981; color: #FFF; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; margin-top: 8px; cursor: pointer; }
+
+/* ==========================================
+   ✨ MODERN & NEUMORPHIC CALENDAR DESIGN
+========================================== */
+
+.calendar-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 10px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* หัวข้อชื่อวัน (อา - ส) */
+.day-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94A3B8;
+  padding-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ช่องการ์ดวันที่แบบ Neumorphic Soft Card */
+.day-cell {
+  background: #F8FAFC;
+  border-radius: 14px;
+  padding: 10px 4px;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+  border: 1px solid #F1F5F9;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+/* เอฟเฟกต์เวลาเอาเมาส์ไปชี้ (Hover) ให้การ์ดลอยขึ้น */
+.day-cell:not(.empty):hover {
+  transform: translateY(-3px) scale(1.02);
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* ✨ วันนี้ (Today) - ไฮไลต์เขียวมรกตพร้อมแสง Glow และเงา 3D */
+.day-cell.today {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border: 2px solid #10B981;
+  color: #065F46;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.day-cell.today span {
+  color: #047857;
+}
+
+/* ช่องวันว่างเปล่า */
+.day-cell.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+/* 🟢🟡🔴 จุดแสดงหมวดหมู่เรืองแสง (Glow Dots) */
+.day-cell .dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.day-cell:hover .dot {
+  transform: scale(1.3);
+}
+
+.dot.green {
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+.dot.yellow {
+  background: #F59E0B;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.8);
+}
+
+.dot.red {
+  background: #EF4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.8);
 }
 
 .day-name {
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-muted);
-  text-align: center;
+  padding-bottom: 4px;
 }
 
 .day-cell {
-  background: var(--bg-main);
+  background: #FAF8F5;
   border-radius: 8px;
-  aspect-ratio: 1 / 1;
-  padding: 4px;
-  font-size: 0.8rem;
+  padding: 6px 2px;
+  min-height: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .day-cell.today {
-  border: 2px solid var(--primary-dark);
-  background: #FFF;
+  background: #FFFFFF;
+  border: 2px solid var(--primary-green);
+  color: #065F46;
+  font-weight: 800;
 }
 
-.dots { display: flex; gap: 2px; }
-.dot { width: 5px; height: 5px; border-radius: 50%; }
-.dot.green { background: var(--color-essential); }
-.dot.yellow { background: var(--color-reward); }
-.dot.red { background: var(--color-impulse); }
+.day-cell .dots { display: flex; gap: 2px; margin-top: 2px; }
+.dot { width: 4px; height: 4px; border-radius: 50%; }
+.dot.green { background: #10B981; }
+.dot.yellow { background: #F59E0B; }
+.dot.red { background: #EF4444; }
 
-.expense-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 250px;
-  overflow-y: auto;
-}
-
-.expense-card {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 12px;
-  background: var(--bg-main);
-  border-radius: 8px;
-  font-size: 0.85rem;
-}
-
-.filter-buttons { display: flex; gap: 6px; }
-.btn-filter {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-.btn-filter.active {
-  background: var(--primary-btn);
-  color: #FFF;
-}
-
-/* Modal Styling */
+/* ==========================================
+   6. MODAL POPUP
+   ========================================== */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -344,21 +474,802 @@ body {
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(4px);
   display: flex; justify-content: center; align-items: center;
-  z-index: 1000;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s;
+  z-index: 9999;
+  opacity: 0; visibility: hidden;
+  transition: all 0.25s ease-in-out;
 }
-.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.modal-overlay.active { opacity: 1; visibility: visible; }
+
 .modal-content {
-  background: #FFF; border-radius: 20px; padding: 24px;
-  width: 90%; max-width: 380px; text-align: center;
+  background: #FFFFFF;
+  padding: 28px;
+  border-radius: 24px;
+  max-width: 400px; width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  transform: scale(0.9);
+  transition: transform 0.25s ease-in-out;
 }
-.modal-quote {
-  font-size: 0.9rem; background: #FEF2F2; padding: 12px;
-  border-radius: 10px; color: #991B1B; margin: 12px 0;
+
+.modal-overlay.active .modal-content { transform: scale(1); }
+.modal-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.modal-content h3 { font-size: 1.1rem; font-weight: 800; color: #991B1B; margin-bottom: 12px; }
+#sarcasm-text { font-size: 0.9rem; color: #475569; margin-bottom: 20px; line-height: 1.5; }
+
+
+.section-highlight {
+  animation: border-pulse-emerald 1.2s ease-in-out 2 !important;
+  border-radius: 20px;
 }
-.modal-warning { font-size: 0.8rem; color: #DC2626; margin-bottom: 16px; font-weight: 600; }
-.btn-modal-close {
-  width: 100%; padding: 10px; background: #0F172A; color: #FFF;
-  border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
+
+/* ==========================================
+   ✨ RECENT EXPENSE LIST (จัดทรงข้อมูลจริงที่คุณกรอก)
+   ========================================== */
+#expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* กรณีที่ JS สร้างเป็น div แต่ละแถว */
+#expense-list > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 16px !important;
+  background: #FAF8F5;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+#expense-list > div:hover {
+  background: #FFFFFF;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.app-layout-top {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* TOP NAVBAR */
+.top-navbar {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo h2 { font-size: 1.05rem; font-weight: 800; color: #064E3B; letter-spacing: -0.3px; }
+
+.nav-menu-top {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-menu-top .nav-item {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.nav-menu-top .nav-item:hover, 
+.nav-menu-top .nav-item.active {
+  background: #064E3B;
+  color: #FFFFFF;
+}
+
+.streak-widget-top {
+  background: #FFF7ED;
+  border: 1px solid #FFD8A8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #EA580C;
+}
+
+.main-wrapper-top {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  width: 100%;
+}
+
+/* ==========================================
+   🚨 ANIMATION FOR OVER BUDGET MODAL
+========================================== */
+
+/* ฉากหลังค่อยๆ มืดและเบลอซูมเข้ามา */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* เมื่อสั่ง active ให้ฉากหลังโชว์ขึ้นมา */
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ตัวกล่องการ์ดป๊อบอัพเด้งซูม + สั่นเตือนสติ */
+.modal-overlay.active .modal-content {
+  animation: popAndShake 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* แอนิเมชันไอคอนหวอไซเรนหมุนสั่นกวักสายตา */
+.modal-overlay.active .modal-icon {
+  display: inline-block;
+  font-size: 3rem;
+  animation: sirenBounce 1s infinite alternate ease-in-out;
+}
+
+/* Keyframes: จังหวะเด้งขยายแล้วสั่นเบาๆ */
+@keyframes popAndShake {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(30px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+  85% {
+    transform: scale(0.98) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateY(0);
+  }
+}
+
+/* แอนิเมชันไอคอนหวอไซเรนสั่นรัวซ้าย-ขวา 🚨 */
+.modal-overlay.active .modal-icon {
+  display: inline-block;
+  font-size: 3rem;
+  animation: sirenShake 0.15s infinite alternate ease-in-out;
+}
+
+/* Keyframes: สั่นสะบัดซ้ายขวาแบบรัวๆ */
+@keyframes sirenShake {
+  0% {
+    transform: rotate(-8deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(8deg) scale(1.1);
+  }
+}
+/* ==========================================
+   📜 FIX EXPENSE LIST HEIGHT & SCROLL
+========================================== */
+
+#expense-list {
+  max-height: 280px; /* กำหนดความสูงสูงสุดที่ต้องการ (ปรับเพิ่ม/ลดได้ตามชอบ) */
+  overflow-y: auto;  /* แสดง Scrollbar ให้เลื่อนดูได้เมื่อรายการยาวเกิน */
+  padding-right: 6px; /* เว้นระยะขวาไม่ให้ตัวหนังสือติดสโครลบาร์เกินไป */
+}
+
+/* 🎨 ตกแต่ง Custom Scrollbar ให้เข้ากับธีมเว็บสวยงาม */
+#expense-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#expense-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+}
+
+#expense-list::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 10px;
+}
+
+#expense-list::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+/* ==========================================
+   💬 CALENDAR HOVER TOOLTIP STYLES
+========================================== */
+
+/* ตั้งค่าให้ตัวการ์ดวันเป็นกรอบอ้างอิง */
+.day-cell {
+  position: relative;
+}
+
+/* กล่อง Tooltip ซ่อนไว้เป็นค่าเริ่มต้น */
+.calendar-tooltip {
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: 180px;
+  background: #1E293B;
+  color: #FFFFFF;
+  padding: 10px 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  font-size: 0.8rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+}
+
+/* สามเหลี่ยมชี้ลงล่างใต้ Tooltip */
+.calendar-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #1E293B transparent transparent transparent;
+}
+
+/* ✨ แสดง Tooltip พร้อมลอยขึ้นเล็กน้อยเมื่อเอาเมาส์ชี้ */
+.day-cell:hover .calendar-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  color: #94A3B8;
+}
+
+.tooltip-header strong {
+  color: #34D399;
+}
+
+.tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  gap: 8px;
+}
+
+.tooltip-item span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  color: #E2E8F0;
+}
+
+.tooltip-item strong {
+  color: #F87171;
+}
+/* ==========================================
+   🔔 CUSTOM CENTER ALERT MODAL
+========================================== */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9999;
+}
+
+.custom-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.custom-modal-card {
+  background: #FFFFFF;
+  width: 90%;
+  max-width: 400px;
+  padding: 28px 24px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transform: scale(0.8) translateY(20px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.custom-modal-overlay.active .custom-modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.custom-modal-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.custom-modal-card h3 {
+  font-size: 1.25rem;
+  color: #1E293B;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.custom-modal-card p {
+  font-size: 0.92rem;
+  color: #64748B;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  white-space: pre-line; /* รองรับการขึ้นบรรทัดใหม่ */
+}
+
+.custom-modal-card button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.custom-modal-card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* ==========================================
+   ✨ MINIMAL FLOATING NAVBAR
+========================================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  margin-bottom: 24px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 1.4rem;
+  background: #ECFDF5;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid #A7F3D0;
+}
+
+.logo-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+}
+
+.badge-status {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #059669;
+  background: #ECFDF5;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #A7F3D0;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1);
+}
+
+/* ==========================================
+   📊 STACKED PROGRESS BAR STYLES
+========================================== */
+.progress-card {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 12px;
+}
+
+.progress-bar-container {
+  height: 16px;
+  background: #F1F5F9;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.bar-segment {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bar-segment.essential { background: linear-gradient(90deg, #10B981, #34D399); }
+.bar-segment.reward { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+.bar-segment.impulse { background: linear-gradient(90deg, #EF4444, #F87171); }
+
+.progress-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 0.78rem;
+  color: #64748B;
+}
+
+.progress-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================
+   ✨ DEEP DIMENSION BACKGROUND & AMBIENT GLOW
+========================================== */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* 1. ไล่เฉดสีพื้นหลังแบบพรีเมียม นุ่มตา */
+  background: radial-gradient(circle at 15% 15%, #F0FDF4 0%, #F8FAFC 50%, #F1F5F9 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif;
+}
+
+/* 2. สร้างวงกลมเรืองแสงลอยด้านหลัง (Ambient Glow Orbs) เพิ่มมิติ */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.65;
+  animation: floatGlow 12s ease-in-out infinite alternate;
+}
+
+/* วงกลมแสงสีเขียวมรกตฝั่งซ้ายบน */
+body::before {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.25) 0%, rgba(16, 185, 129, 0.05) 70%);
+  top: -100px;
+  left: -100px;
+}
+
+/* วงกลมแสงสีฟ้าคราม/เหลืองฝั่งขวาช่วงล่าง */
+body::after {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(251, 191, 36, 0.08) 70%);
+  bottom: -100px;
+  right: -100px;
+  animation-delay: -6s;
+}
+
+/* แอนิเมชันให้วงกลมแสงขยับช้าๆ เพิ่มความมีชีวิตชีวา */
+@keyframes floatGlow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, 40px) scale(1.08);
+  }
+  100% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+/* ==========================================
+   🧊 UPGRADED GLASS CARDS (กระจกฝ้ามีมิติ)
+========================================== */
+/* อัปเดตการ์ดต่างๆ ในหน้าเว็บให้เป็นกระจกฝ้าที่ลอยเด่นขึ้นมาจากพื้นหลัง */
+.progress-card,
+.day-cell,
+.card,
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    0 10px 30px -5px rgba(15, 23, 42, 0.04),
+    0 4px 12px -2px rgba(15, 23, 42, 0.02),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* เอฟเฟกต์ยกตัวขึ้นและเงาละมุนเมื่อเอาเมาส์ไปชี้การ์ด */
+.progress-card:hover,
+.card:hover,
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 20px 35px -8px rgba(15, 23, 42, 0.08),
+    0 6px 16px -4px rgba(15, 23, 42, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1) !important;
+}
+
+/* ==========================================
+   📅 3D GLASSMORPHIC CALENDAR ENHANCEMENT
+========================================== */
+
+/* 1. หัวข้อวันในสัปดาห์ (อา-ส) */
+.day-name {
+  font-weight: 700;
+  color: #64748B;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+}
+
+/* 2. กล่องวันที่ธรรมดา */
+.day-cell {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  position: relative;
+  overflow: visible !important; /* เพื่อให้ Tooltip ลอยสวยงาม */
+}
+
+/* 3. Hover Effect: กล่องวันที่ลอยนูนขึ้นมาเมื่อชี้ */
+.day-cell:not(.empty):hover {
+  transform: translateY(-4px) scale(1.03) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: #34D399 !important;
+  box-shadow: 
+    0 12px 20px -5px rgba(16, 185, 129, 0.15),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  z-index: 10;
+}
+
+/* 4. Highlight วันปัจจุบัน (Today Glow) */
+.day-cell.today {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%) !important;
+  border: 2px solid #10B981 !important;
+  box-shadow: 
+    0 0 15px rgba(16, 185, 129, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 1) !important;
+}
+
+.day-cell.today span {
+  color: #047857 !important;
+  font-weight: 800 !important;
+}
+
+/* 5. จุดสีหมวดหมู่เรืองแสง 3D (Glow Dots) */
+.day-cell .dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.day-cell .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+/* เม็ดไฟสีเขียว (Need) */
+.day-cell .dot.green {
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+/* เม็ดไฟสีเหลือง (Reward) */
+.day-cell .dot.yellow {
+  background: #F59E0B;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.8);
+}
+
+/* เม็ดไฟสีแดง (Want/Impulse) */
+.day-cell .dot.red {
+  background: #EF4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.8);
+}
+
+/* 6. ปรับแต่ง Tooltip ให้ดูเป็นกระจกพรีเมียม */
+.calendar-tooltip {
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25) !important;
+  color: #F8FAFC !important;
+  padding: 12px 14px !important;
+}
+/* ==========================================
+   🐷 CUSTOM PIGGY BANK LOGO
+========================================== */
+.logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.25));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* เอฟเฟกต์เด้งดุ๊กดิ๊กเมื่อเอาเมาส์ไปชี้โลโก้ */
+.nav-brand:hover .logo-img {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+/* ==========================================
+   ✨ LOADING SCREEN ANIMATION
+   ========================================== */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 50%, #F0FDF4 0%, #E2E8F0 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.6s;
+}
+
+/* เอฟเฟกต์ซูมหายและจางลง */
+.loading-overlay.fade-out {
+  opacity: 0;
+  transform: scale(1.08);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+/* อิโมจิเด้งดุ๊กดิ๊ก */
+.loader-icon {
+  font-size: 4rem;
+  margin-bottom: 12px;
+  animation: bouncePig 1.2s infinite ease-in-out alternate;
+  filter: drop-shadow(0 10px 15px rgba(16, 185, 129, 0.3));
+}
+
+@keyframes bouncePig {
+  0% { transform: translateY(0) scale(1) rotate(-3deg); }
+  100% { transform: translateY(-16px) scale(1.08) rotate(3deg); }
+}
+
+/* วงแหวนโหลดมินิมอล */
+.loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(16, 185, 129, 0.15);
+  border-top: 3px solid #10B981;
+  border-radius: 50%;
+  animation: spinLoader 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spinLoader {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #064E3B;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.loader-sub {
+  font-size: 0.82rem;
+  color: #64748B;
+  font-weight: 600;
+  animation: pulseText 1.5s infinite ease-in-out alternate;
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
 }

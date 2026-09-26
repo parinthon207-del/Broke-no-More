@@ -1,41 +1,20 @@
-import { Transaction } from './Transaction.js';
+// ใน Expense.js (คลาสแม่)
+export class Expense {
+  #amount;
+  #note;
+  #date; // 🟢 เพิ่มตัวแปรวันที่
 
-/**
- * Child Class สำหรับการบันทึกรายจ่ายโดยเฉพาะ (Inheritance & Polymorphism)
- */
-export class Expense extends Transaction {
-  #categoryLevel; // 'ESSENTIAL' | 'REWARD' | 'IMPULSE'
-
-  static CATEGORY_TYPES = {
-    ESSENTIAL: { label: 'Need (จำเป็น)', color: '#10B981', icon: '🟢' },
-    REWARD: { label: 'Reward (รางวัลชีวิต)', color: '#F59E0B', icon: '🟡' },
-    IMPULSE: { label: 'Impulse (กิเลส)', color: '#EF4444', icon: '🔴' }
-  };
-
-  constructor(amount, note, categoryLevel = 'ESSENTIAL') {
-    super(amount, note); // สืบทอด id, amount, date, note จาก Transaction
-
-    if (!Expense.CATEGORY_TYPES[categoryLevel]) {
-      throw new Error(`Invalid Category Level: ${categoryLevel}`);
-    }
-    this.#categoryLevel = categoryLevel;
+  constructor(amount, note) {
+    this.#amount = amount;
+    this.#note = note;
+    this.#date = new Date().toISOString().split('T')[0]; // เก็บวันที่ YYYY-MM-DD
   }
 
-  getCategoryLevel() {
-    return this.#categoryLevel;
-  }
+  getAmount() { return this.#amount; }
+  getNote() { return this.#note; }
+  getDate() { return this.#date; } // 🟢 เมธอดดึงวันที่
 
   getCategoryBadge() {
-    return Expense.CATEGORY_TYPES[this.#categoryLevel];
-  }
-
-  isImpulse() {
-    return this.#categoryLevel === 'IMPULSE';
-  }
-
-  // Polymorphism: Override วิธีแสดงผลของ Parent Class
-  getSummary() {
-    const badge = this.getCategoryBadge();
-    return `${badge.icon} [${badge.label}] ${this.getFormattedAmount()} : ${this.getNote()}`;
+    return { icon: '💸', label: 'ทั่วไป', color: '#64748B', level: 'GENERAL' };
   }
 }
