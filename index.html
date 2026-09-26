@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broke No More</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- 1. HEADER (ไม่มี tagline คลีนๆ) -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">💸</span>
+        <h1>BROKE NO MORE</h1>
+      </div>
+    </header>
+
+    <!-- 2. DASHBOARD CARDS -->
+    <section class="dashboard-grid">
+      <div class="card metric-card highlight">
+        <span class="card-label">วันนี้ใช้ได้อีกไม่เกิน</span>
+        <div class="metric-value green" id="daily-allowance">฿0.00 / วัน</div>
+        <span class="card-sub">คำนวณจาก ยอดคงเหลือ ÷ วันที่เหลือ</span>
+      </div>
+
+      <div class="card metric-card">
+        <span class="card-label">เงินคงเหลือทั้งหมด</span>
+        <div class="metric-value" id="current-balance">฿0.00</div>
+        <span class="card-sub">จากงบประมาณตั้งต้น</span>
+      </div>
+
+      <div class="card metric-card">
+        <span class="card-label">คะแนนวินัยทางการเงิน</span>
+        <div class="metric-value" id="guilty-score">100 / 100</div>
+        <span class="card-sub">ยิ่งจ่ายกิเลสเยอะ คะแนนยิ่งลด</span>
+      </div>
+    </section>
+
+    <!-- 3. MAIN CONTENT (3 คอลัมน์สมบูรณ์แบบ) -->
+    <main class="main-content">
+      
+      <!-- ===== คอลัมน์ที่ 1 (ซ้ายสุด): ศูนย์รวมสติ & Hall of Fame ===== -->
+      <aside class="sidebar-column">
+        
+        <!-- บล็อก 1: สถานะสติการเงิน -->
+        <div class="card status-card">
+          <h3>🧠 สถานะสติการเงิน</h3>
+          <div class="status-badge green" id="mind-status">สติแข็งแกร่ง!</div>
+          <p class="status-desc" id="status-desc">ยังไม่ได้เปย์กิเลสในวันนี้ จงรักษาความดีงามนี้ไว้จนถึงสิ้นเดือน</p>
+        </div>
+
+        <!-- บล็อก 2: กิเลส Hall of Fame (Top 3 จ่ายหนักสุด) -->
+        <div class="card hall-of-fame-card">
+          <h3>🏆 กิเลส Hall of Fame</h3>
+          <p class="hof-sub">3 รายการเปย์หนักสุดเดือนนี้</p>
+          <div class="hof-list" id="hof-list">
+            <div class="hof-empty">ยังไม่มีรายการกิเลส 🎉</div>
+          </div>
+        </div>
+
+        <!-- บล็อก 3: ข้อคิดเตือนสติ -->
+        <div class="card quote-card">
+          <h3>💡 ข้อคิดเตือนสติ</h3>
+          <p id="sarcastic-quote" class="quote-text">"ยินดีต้อนรับ! บันทึกรายจ่ายแรกของคุณ แล้วมาดูกันว่าสติหรือกิเลสจะชนะ"</p>
+        </div>
+
+      </aside>
+
+      <!-- ===== คอลัมน์ที่ 2 (กลาง): ฟอร์มบันทึก & สัดส่วน Vibe ===== -->
+      <div class="middle-column">
+        
+        <section class="card form-card">
+          <h2>บันทึกรายจ่ายใหม่</h2>
+          <form id="expense-form">
+            <div class="form-group">
+              <label for="amount-input">จำนวนเงิน (บาท)</label>
+              <input type="number" id="amount-input" placeholder="0.00" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="note-input">รายการ / บันทึกสั้นๆ</label>
+              <input type="text" id="note-input" placeholder="เช่น กาแฟส้ม, สุ่มกาชา" required>
+            </div>
+
+            <div class="form-group">
+              <label for="level-select">ระดับกิเลส (Impulse Level)</label>
+              <select id="level-select">
+                <option value="ESSENTIAL">🟢 Need — จำเป็นต่อการรอดชีวิต</option>
+                <option value="REWARD">🟡 Reward — ให้รางวัลตัวเองนิดหน่อย</option>
+                <option value="IMPULSE">🔴 Impulse — กิเลสเพียวๆ (พร้อมโดนแซว)</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn-primary">+ บันทึกรายการ</button>
+          </form>
+        </section>
+
+        <section class="card vibe-card">
+          <h3>สัดส่วนการใช้เงินเดือนนี้</h3>
+          <div class="vibe-progress-bar">
+            <div class="bar-segment green" id="bar-essential" style="width: 0%;"></div>
+            <div class="bar-segment yellow" id="bar-reward" style="width: 0%;"></div>
+            <div class="bar-segment red" id="bar-impulse" style="width: 0%;"></div>
+          </div>
+          <div class="vibe-legend">
+            <span id="legend-essential">🟢 จำเป็น 0%</span>
+            <span id="legend-reward">🟡 รางวัล 0%</span>
+            <span id="legend-impulse">🔴 กิเลส 0%</span>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===== คอลัมน์ที่ 3 (ขวา): ปฏิทิน & ประวัติการใช้จ่าย ===== -->
+      <div class="right-column">
+        
+        <section class="card calendar-card">
+          <div class="calendar-header">
+            <h3>ปฏิทินเช็คกิเลสประจำเดือน</h3>
+            <span class="month-label" id="calendar-month-year">มีนาคม 2026</span>
+          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
+        </section>
+
+        <section class="card history-card">
+          <div class="history-header">
+            <h2>ประวัติการใช้จ่าย</h2>
+            <div class="filter-buttons">
+              <button class="btn-filter active" data-filter="ALL">ทั้งหมด</button>
+              <button class="btn-filter" data-filter="IMPULSE">🔴 เฉพาะกิเลส</button>
+            </div>
+          </div>
+          <div class="expense-list" id="expense-list"></div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Custom Alert Modal เตือนสติกลางหน้าจอ -->
+  <div class="modal-overlay" id="sarcasm-modal">
+    <div class="modal-content">
+      <div class="modal-icon">🚨</div>
+      <h3>เตือนสติสายเปย์!</h3>
+      <div class="modal-quote" id="modal-quote">"..."</div>
+      <div class="modal-warning" id="modal-warning">เงินจมไปกับกิเลสแล้ว 0%</div>
+      <button class="btn-modal-close" id="close-modal-btn">จะซื้อ! (ยอมรับกรรม)</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
