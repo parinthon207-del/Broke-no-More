@@ -1,7 +1,6 @@
-// เพิ่ม import ด้านบนสุดของ UIManager.js
 import { EssentialExpense } from './EssentialExpense.js';
 import { RewardExpense } from './RewardExpense.js';
-import { ImpulseExpense } from './ImpulseExpense.js'
+import { ImpulseExpense } from './ImpulseExpense.js';
 import { Expense } from './Expense.js';
 
 export class UIManager {
@@ -91,38 +90,38 @@ export class UIManager {
   }
 
   handleFormSubmit(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const amountInput = document.querySelector('#amount-input');
-  const noteInput = document.querySelector('#note-input');
-  const selectedLevel = document.querySelector('input[name="level"]:checked');
+    const amountInput = document.querySelector('#amount-input');
+    const noteInput = document.querySelector('#note-input');
+    const selectedLevel = document.querySelector('input[name="level"]:checked');
 
-  if (!amountInput || !noteInput || !selectedLevel) return;
+    if (!amountInput || !noteInput || !selectedLevel) return;
 
-  const amount = parseFloat(amountInput.value);
-  const note = noteInput.value;
-  const level = selectedLevel.value;
+    const amount = parseFloat(amountInput.value);
+    const note = noteInput.value;
+    const level = selectedLevel.value;
 
-  try {
-    // 🟢 สร้างวัตถุตาม Subclass (Polymorphism)
-    let newExpense;
-    if (level === 'ESSENTIAL') newExpense = new EssentialExpense(amount, note);
-    else if (level === 'REWARD') newExpense = new RewardExpense(amount, note);
-    else newExpense = new ImpulseExpense(amount, note);
+    try {
+      // 🟢 สร้างวัตถุตาม Subclass (Polymorphism)
+      let newExpense;
+      if (level === 'ESSENTIAL') newExpense = new EssentialExpense(amount, note);
+      else if (level === 'REWARD') newExpense = new RewardExpense(amount, note);
+      else newExpense = new ImpulseExpense(amount, note);
 
-    this.#analyzer.addExpense(newExpense);
+      this.#analyzer.addExpense(newExpense);
 
-    event.target.reset();
-    const defaultRadio = document.querySelector('input[name="level"][value="ESSENTIAL"]');
-    if (defaultRadio) defaultRadio.checked = true;
+      event.target.reset();
+      const defaultRadio = document.querySelector('input[name="level"][value="ESSENTIAL"]');
+      if (defaultRadio) defaultRadio.checked = true;
 
-    this.render();
-    this.checkOverBudgetAlert();
+      this.render();
+      this.checkOverBudgetAlert();
 
-  } catch (error) {
-    alert(error.message);
+    } catch (error) {
+      alert(error.message);
+    }
   }
-}
 
   checkOverBudgetAlert() {
     const baseDaily = this.#account.getBaseDailyAllowance();
@@ -172,25 +171,67 @@ export class UIManager {
     }
   }
 
+  // 🎨 อัปเกรดส่วนแสดงรายการใช้จ่าย (รวม Empty State และปุ่มลบ)
   renderExpenseList() {
-    const listContainer = document.querySelector('#expense-list');
+    const listContainer = document.querySelector('#expense-list') || document.querySelector('#transaction-list');
     if (!listContainer) return;
 
     const expenses = this.#analyzer.getExpenses();
+
+    // กรณีไม่มีรายการ (Empty State)
     if (expenses.length === 0) {
-      listContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 12px;">ยังไม่มีรายการใช้จ่าย</div>`;
+      listContainer.innerHTML = `
+        <div class="empty-state" style="text-align: center; padding: 24px 16px; background: #f8fafc; border: 1px dashed #e2e8f0; border-radius: 12px;">
+          <div style="font-size: 2rem; margin-bottom: 6px;">🛒</div>
+          <div style="color: #94a3b8; font-size: 0.9rem;">ยังไม่มีรายการใช้จ่าย</div>
+        </div>
+      `;
       return;
     }
 
-    listContainer.innerHTML = [...expenses].reverse().map(exp => {
-      const badge = exp.getCategoryBadge();
+    // มีรายการใช้จ่าย ให้เรนเดอร์ย้อนหลังจากล่าสุดขึ้นก่อน
+    const reversedExpenses = [...expenses].reverse();
+    const originalIndexes = expenses.map((_, idx) => idx).reverse();
+
+    listContainer.innerHTML = reversedExpenses.map((exp, i) => {
+      const badge = exp.getCategoryBadge ? exp.getCategoryBadge() : { icon: '💸' };
+      const note = exp.getNote ? exp.getNote() : 'รายการใช้จ่าย';
+      const amount = exp.getAmount ? exp.getAmount() : 0;
+      const originalIndex = originalIndexes[i];
+
       return `
-        <div>
-          <span>${badge.icon} ${exp.getNote()}</span>
-          <strong style="color: #064E3B;">฿${exp.getAmount().toLocaleString()}</strong>
+        <div class="transaction-item" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; margin-bottom: 8px; background: #ffffff; border: 1px solid #f1f5f9; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2rem;">${badge.icon}</span>
+            <span style="font-weight: 500; color: #334155; font-size: 0.95rem;">${note}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <strong style="color: #EF4444; font-size: 0.95rem;">-฿${amount.toLocaleString()}</strong>
+            <button class="delete-btn" data-index="${originalIndex}" style="background: none; border: none; cursor: pointer; opacity: 0.6; font-size: 0.9rem;" title="ลบรายการ">🗑️</button>
+          </div>
         </div>
       `;
     }).join('');
+
+    // ผูก Event ปุ่มลบรายการ
+    this.bindDeleteEvents(listContainer);
+  }
+
+  bindDeleteEvents(container) {
+    const deleteButtons = container.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+        if (confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?')) {
+          if (typeof this.#analyzer.removeExpense === 'function') {
+            this.#analyzer.removeExpense(index);
+          } else if (typeof this.#account.removeExpense === 'function') {
+            this.#account.removeExpense(index);
+          }
+          this.render(); // เรนเดอร์ UI คำนวณยอดเงินใหม่ทั้งหมด
+        }
+      });
+    });
   }
 
   renderCalendar() {
@@ -306,7 +347,6 @@ export class UIManager {
     const totalSpent = essentialSpent + rewardSpent + impulseSpent;
     const totalPct = Math.round((totalSpent / accumulatedBudget) * 100);
 
-    // 🟢 คำนวณสัดส่วนแบบกระจายความกว้างไม่ให้หลอดล้นทะลุ 100%
     const scale = totalSpent > accumulatedBudget ? (accumulatedBudget / totalSpent) : 1;
     
     const pctEssential = (essentialSpent / accumulatedBudget) * 100 * scale;
@@ -328,9 +368,35 @@ export class UIManager {
     const elPctReward = document.querySelector('#pct-reward');
     const elPctImpulse = document.querySelector('#pct-impulse');
 
-    // ตัวเลขเปอร์เซ็นต์จริงเทียบกับงบสะสม
     if (elPctEssential) elPctEssential.textContent = `${Math.round((essentialSpent / accumulatedBudget) * 100)}%`;
     if (elPctReward) elPctReward.textContent = `${Math.round((rewardSpent / accumulatedBudget) * 100)}%`;
     if (elPctImpulse) elPctImpulse.textContent = `${Math.round((impulseSpent / accumulatedBudget) * 100)}%`;
+  }
+  bindDeleteEvents(container) {
+    const deleteButtons = container.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+        
+        // ดึงข้อมูลรายการที่จะลบมาแสดงในข้อความแจ้งเตือน
+        const expenses = this.#analyzer.getExpenses();
+        const targetExpense = expenses[index];
+        const note = targetExpense ? targetExpense.getNote() : 'รายการนี้';
+        const amount = targetExpense ? targetExpense.getAmount() : 0;
+
+        // ลบรายการและบันทึกข้อมูล
+        if (typeof this.#analyzer.removeExpense === 'function') {
+          this.#analyzer.removeExpense(index);
+          this.render(); // อัปเดตหน้าจอทันที
+
+          // แสดง Modal แจ้งเตือนสวยๆ ตรงกลางจอ
+          this.showCustomAlert(
+            'ลบรายการสำเร็จ!',
+            `ลบรายการ "<strong>${note}</strong>" (฿${amount.toLocaleString()}) คืนยอดเงินเข้ากระเป๋าเรียบร้อยแล้ว`,
+            '🗑️'
+          );
+        }
+      });
+    });
   }
 }

@@ -60,11 +60,18 @@ export class FinancialAnalyzer {
     this.saveExpenses();
   }
 
-  removeExpense(expenseId) {
-    const index = this.#expenses.findIndex(e => e.getId() === expenseId);
-    if (index !== -1) {
-      const removed = this.#expenses.splice(index, 1)[0];
-      this.#account.addBack(removed.getAmount());
+  // 🟢 แก้ไขเมธอด removeExpense ให้รับ index และคืนเงินกลับเข้าบัญชี
+  removeExpense(index) {
+    if (index >= 0 && index < this.#expenses.length) {
+      // 1. ดึงรายการที่จะลบออกมา
+      const [removed] = this.#expenses.splice(index, 1);
+      
+      // 2. คืนเงินกลับเข้าบัญชี
+      if (removed && typeof this.#account.addBack === 'function') {
+        this.#account.addBack(removed.getAmount());
+      }
+
+      // 3. บันทึกรายการที่เหลือลง LocalStorage
       this.saveExpenses();
       return true;
     }
