@@ -103,7 +103,6 @@ export class UIManager {
     const level = selectedLevel.value;
 
     try {
-      // 🟢 สร้างวัตถุตาม Subclass (Polymorphism)
       let newExpense;
       if (level === 'ESSENTIAL') newExpense = new EssentialExpense(amount, note);
       else if (level === 'REWARD') newExpense = new RewardExpense(amount, note);
@@ -171,14 +170,12 @@ export class UIManager {
     }
   }
 
-  // 🎨 อัปเกรดส่วนแสดงรายการใช้จ่าย (รวม Empty State และปุ่มลบ)
   renderExpenseList() {
     const listContainer = document.querySelector('#expense-list') || document.querySelector('#transaction-list');
     if (!listContainer) return;
 
     const expenses = this.#analyzer.getExpenses();
 
-    // กรณีไม่มีรายการ (Empty State)
     if (expenses.length === 0) {
       listContainer.innerHTML = `
         <div class="empty-state" style="text-align: center; padding: 24px 16px; background: #f8fafc; border: 1px dashed #e2e8f0; border-radius: 12px;">
@@ -189,7 +186,6 @@ export class UIManager {
       return;
     }
 
-    // มีรายการใช้จ่าย ให้เรนเดอร์ย้อนหลังจากล่าสุดขึ้นก่อน
     const reversedExpenses = [...expenses].reverse();
     const originalIndexes = expenses.map((_, idx) => idx).reverse();
 
@@ -213,7 +209,6 @@ export class UIManager {
       `;
     }).join('');
 
-    // ผูก Event ปุ่มลบรายการ
     this.bindDeleteEvents(listContainer);
   }
 
@@ -222,14 +217,22 @@ export class UIManager {
     deleteButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const index = parseInt(e.currentTarget.getAttribute('data-index'));
-        if (confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?')) {
-          if (typeof this.#analyzer.removeExpense === 'function') {
-            this.#analyzer.removeExpense(index);
-          } else if (typeof this.#account.removeExpense === 'function') {
-            this.#account.removeExpense(index);
+        const expenses = this.#analyzer.getExpenses();
+        const targetExpense = expenses[index];
+        const note = targetExpense ? targetExpense.getNote() : 'รายการนี้';
+        const amount = targetExpense ? targetExpense.getAmount() : 0;
+
+        this.showConfirmModal(
+          'ยืนยันการลบรายการ',
+          `คุณต้องการลบรายการ "<strong>${note}</strong>" (฿${amount.toLocaleString()}) ใช่หรือไม่?`,
+          '🗑️',
+          () => {
+            if (typeof this.#analyzer.removeExpense === 'function') {
+              this.#analyzer.removeExpense(index);
+              this.render();
+            }
           }
-          this.render(); // เรนเดอร์ UI คำนวณยอดเงินใหม่ทั้งหมด
-        }
+        );
       });
     });
   }
@@ -372,31 +375,83 @@ export class UIManager {
     if (elPctReward) elPctReward.textContent = `${Math.round((rewardSpent / accumulatedBudget) * 100)}%`;
     if (elPctImpulse) elPctImpulse.textContent = `${Math.round((impulseSpent / accumulatedBudget) * 100)}%`;
   }
-  bindDeleteEvents(container) {
-    const deleteButtons = container.querySelectorAll('.delete-btn');
-    deleteButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const index = parseInt(e.currentTarget.getAttribute('data-index'));
-        
-        // ดึงข้อมูลรายการที่จะลบมาแสดงในข้อความแจ้งเตือน
-        const expenses = this.#analyzer.getExpenses();
-        const targetExpense = expenses[index];
-        const note = targetExpense ? targetExpense.getNote() : 'รายการนี้';
-        const amount = targetExpense ? targetExpense.getAmount() : 0;
 
-        // ลบรายการและบันทึกข้อมูล
-        if (typeof this.#analyzer.removeExpense === 'function') {
-          this.#analyzer.removeExpense(index);
-          this.render(); // อัปเดตหน้าจอทันที
+  showConfirmModal(title, message, icon = '❓', onConfirm) {
+    const modal = document.querySelector('#custom-alert-modal');
+    const titleEl = document.querySelector('#custom-alert-title');
+    const msgEl = document.querySelector('#custom-alert-message');
+    const iconEl = document.querySelector('#custom-alert-icon');
+    const closeBtn = document.querySelector('#custom-alert-btn');
 
-          // แสดง Modal แจ้งเตือนสวยๆ ตรงกลางจอ
-          this.showCustomAlert(
-            'ลบรายการสำเร็จ!',
-            `ลบรายการ "<strong>${note}</strong>" (฿${amount.toLocaleString()}) คืนยอดเงินเข้ากระเป๋าเรียบร้อยแล้ว`,
-            '🗑️'
-          );
+    if (!modal || !titleEl || !msgEl || !closeBtn) return;
+
+    titleEl.textContent = title;
+    msgEl.innerHTML = message;
+    if (iconEl) iconEl.textContent = icon;
+
+    closeBtn.style.display = 'none';
+
+    let actionContainer = modal.querySelector('.modal-actions-group');
+    if (!actionContainer) {
+      actionContainer = document.createElement('div');
+      actionContainer.className = 'modal-actions-group';
+      actionContainer.style.cssText = 'display: flex; gap: 12px; margin-top: 20px; width: 100%;';
+      closeBtn.parentNode.appendChild(actionContainer);
+    } else {
+      actionContainer.style.display = 'flex';
+    }
+
+    actionContainer.innerHTML = `
+      <button id="modal-cancel-btn" style="flex: 1; padding: 10px 16px; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">ยกเลิก</button>
+      <button id="modal-confirm-btn" style="flex: 1; padding: 10px 16px; border: none; background: #ef4444; color: #ffffff; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">ยืนยันลบ</button>
+    `;
+
+    modal.classList.add('active');
+
+    const closeModal = () => {
+      modal.classList.remove('active');
+      actionContainer.remove();
+      closeBtn.style.display = 'block';
+    };
+
+    // ปุ่มยกเลิก
+    actionContainer.querySelector('#modal-cancel-btn').onclick = () => {
+      closeModal();
+    };
+
+    // ปุ่มยืนยันลบ -> สปินเนอร์ -> ติ๊กถูก
+    actionContainer.querySelector('#modal-confirm-btn').onclick = () => {
+      if (typeof onConfirm === 'function') {
+        onConfirm();
+      }
+
+      actionContainer.style.display = 'none';
+
+      titleEl.textContent = 'กำลังลบรายการ...';
+      msgEl.textContent = 'กรุณารอสักครู่';
+      if (iconEl) {
+        iconEl.innerHTML = '<div class="loading-spinner"></div>';
+      }
+
+      // 3. เปลี่ยนเป็นเครื่องหมายติ๊กถูกแบบ SVG วาดเส้น
+      setTimeout(() => {
+        titleEl.textContent = 'ลบรายการสำเร็จ!';
+        msgEl.textContent = 'คืนยอดเงินเข้ากระเป๋าเรียบร้อยแล้ว';
+        if (iconEl) {
+          iconEl.innerHTML = `
+            <div class="success-checkmark">
+              <svg viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none"/>
+                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+              </svg>
+            </div>
+          `;
         }
-      });
-    });
+
+        setTimeout(() => {
+          closeModal();
+        }, 1000);
+      }, 600);
+    };
   }
 }
