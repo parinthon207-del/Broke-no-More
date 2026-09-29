@@ -96,22 +96,41 @@
   <!-- ฝั่งซ้าย: ฟอร์มบันทึก -->
   <section class="card form-card">
     
-    <!-- ⚙️ ส่วนตั้งค่างบประมาณประจำเดือน (เพิ่มใหม่) -->
-    <div class="budget-setup-box" style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-color);">
-      <div class="card-title">
-        <h3 style="font-size: 0.95rem;">⚙️ ตั้งค่างบประมาณ & วันที่</h3>
+    <div class="budget-setting-card">
+  <div class="budget-card-header">
+    <div class="header-icon">⚙️</div>
+    <div class="header-text">
+      <h3>ตั้งค่างบประมาณ & ระยะเวลา</h3>
+      <p>กำหนดงบประมาณและจำนวนวันสำหรับวางแผนการใช้จ่าย</p>
+    </div>
+  </div>
+
+  <div class="budget-input-group">
+    <!-- ช่องระบุงบประมาณ -->
+    <div class="input-field">
+      <label for="total-budget">งบรวมทั้งหมด</label>
+      <div class="input-wrapper">
+        <span class="input-icon">💰</span>
+        <input type="number" id="total-budget" placeholder="0.00" min="0" step="100">
+        <span class="input-suffix">บาท</span>
       </div>
-      <form id="budget-setup-form" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; margin-top: 8px;">
-        <input type="number" id="init-budget-input" placeholder="งบรวมทั้งหมด (฿)" required min="1" style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem;">
-        <input type="number" id="init-days-input" placeholder="จำนวนวัน" value="30" required min="1" style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem;">
-        <button type="submit" style="background: #3B82F6; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer;">บันทึกงบ</button>
-      </form>
     </div>
 
-    <!-- บันทึกรายจ่าย -->
-    <div class="card-title">
-      <h3>⚡ บันทึกรายจ่าย</h3>
+    <!-- ช่องระบุจำนวนวัน -->
+    <div class="input-field">
+      <label for="budget-days">ระยะเวลาใช้งาน</label>
+      <div class="input-wrapper">
+        <span class="input-icon">📅</span>
+        <input type="number" id="budget-days" placeholder="30" value="30" min="1">
+        <span class="input-suffix">วัน</span>
+      </div>
     </div>
+
+    <button class="btn-save-budget" id="save-budget-btn" type="button">
+      <span>✨ บันทึกงบ</span>
+    </button>
+  </div>
+</div>
 
     <div class="quick-amounts">
       <span>ยอดฮิต:</span>
@@ -134,11 +153,28 @@
         </label>
         <label class="level-option yellow">
           <input type="radio" name="level" value="REWARD">
-          <span>🟡 รางวัล (Reward)</span>
+          <span>
+            🟡 รางวัล (Reward)
+            <!-- 🎉 Container พลุกระดาษยิงแยกชิ้นซ้าย-ขวา -->
+            <div class="confetti-container">
+              <i class="c-p c1"></i><i class="c-p c2"></i><i class="c-p c3"></i>
+              <i class="c-p c4"></i><i class="c-p c5"></i><i class="c-p c6"></i>
+              <i class="c-p c7"></i><i class="c-p c8"></i><i class="c-p c9"></i>
+              <i class="c-p c10"></i><i class="c-p c11"></i><i class="c-p c12"></i>
+            </div>
+          </span>
         </label>
         <label class="level-option red">
           <input type="radio" name="level" value="IMPULSE">
-          <span>🔴 ฟุ่มเฟือย (Want)</span>
+          <span>🔴 ฟุ่มเฟือย (Want)
+            <div class="crying-container">
+            <i class="c-emoji e1">😭</i><i class="c-emoji e2">💧</i><i class="c-emoji e3">💸</i>
+            <i class="c-emoji e4">💧</i><i class="c-emoji e5">😭</i><i class="c-emoji e6">💧</i>
+            <i class="c-emoji e7">💧</i><i class="c-emoji e8">😭</i><i class="c-emoji e9">💸</i>
+            <i class="c-emoji e10">💧</i><i class="c-emoji e11">😭</i><i class="c-emoji e12">💧</i>
+          </div>
+          </span>
+          
         </label>
       </div>
 
@@ -193,4 +229,3 @@
 </div>
 </body>
 </html>
-
